@@ -615,11 +615,13 @@ class ui_setting_fun(QtWidgets.QMainWindow,Ui_MainWindow):
         config = configparser.ConfigParser()
         try:
             if self.lineEdit_28.text() =="":
-                filename = os.path.join(os.path.dirname(os.path.abspath("main.py")), "config.ini")     
+                filename = os.path.join(os.path.dirname(os.path.abspath("main.py")), "config.ini")   
+                self.lineEdit_28.setText("config.ini")  
             else:    
                 filename = os.path.join(os.path.dirname(os.path.abspath("main.py")), self.lineEdit_28.text())
         except:
-            filename = os.path.join(os.path.dirname(os.path.abspath("main.py")), "config.ini")     
+            filename = os.path.join(os.path.dirname(os.path.abspath("main.py")), "config.ini")   
+            self.lineEdit_28.setText("config.ini")    
         config.read(filename,encoding='utf-8-sig')
 
 
@@ -667,14 +669,18 @@ class ui_setting_fun(QtWidgets.QMainWindow,Ui_MainWindow):
         # Writing Data
         config = configparser.ConfigParser()
         try:
-            
-            filename = os.path.join(os.path.dirname(os.path.abspath("main.py")),self.lineEdit_28.text())
+            if self.lineEdit_28.text() =="":
+                filename = os.path.join(os.path.dirname(os.path.abspath("main.py")), "config.ini") 
+            else:                 
+                filename = os.path.join(os.path.dirname(os.path.abspath("main.py")),self.lineEdit_28.text())
             config.read(filename,encoding='utf-8-sig')
-            config.add_section('key')
-            config.add_section('key_time')
-            config.add_section('checkbox')
-            config.add_section('self_made_script')
-        except configparser.NoOptionError:
+
+            sectionlist = ['key','key_time','checkbox','self_made_script']
+            for section in sectionlist:
+                if section not in config.sections():
+                    config.add_section(section)
+
+        except :
             self.signal4_log_error.emit('存檔錯誤')
 
 
@@ -776,9 +782,9 @@ class ui_setting_fun(QtWidgets.QMainWindow,Ui_MainWindow):
         self.lineEdit_23.setText('')
         self.lineEdit_24.setText('')
         self.lineEdit_25.setText('')
-        self.lineEdit_26.setText('')
-        self.lineEdit_27.setText('')
-        self.lineEdit_28.setText('')
+        self.lineEdit_26.setText("999")
+        self.lineEdit_27.setText("0")
+
 
 # thread_a = QThread()   # 建立 Thread()
 # thread_a.run = ui_setting_fun.skill()      # 設定該執行緒執行 a()
